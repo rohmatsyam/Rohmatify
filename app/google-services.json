@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "544512793157",
+    "project_id": "rohmatify-app",
+    "storage_bucket": "rohmatify-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544512793157:android:c6b22f461381ce7d18612c",
+        "android_client_info": {
+          "package_name": "com.example.rohmatify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544512793157-t14env9213e6ucuiro97fvjitl5g142h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_wdqe7WSD96njotzi_k9pf7uWGGtlv9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544512793157-t14env9213e6ucuiro97fvjitl5g142h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
