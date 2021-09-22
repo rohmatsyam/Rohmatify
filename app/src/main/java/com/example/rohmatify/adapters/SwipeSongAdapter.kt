@@ -3,16 +3,15 @@ package com.example.rohmatify.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
-import com.example.rohmatify.data.entities.Song
-import com.example.rohmatify.databinding.ListItemBinding
+import com.example.rohmatify.databinding.SwipeItemBinding
 
 class SwipeSongAdapter : BaseSongAdapter() {
-	private lateinit var binding: ListItemBinding
+	private lateinit var binding: SwipeItemBinding
 
 	override val differ = AsyncListDiffer(this, diffCallback)
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
-		binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseSongAdapter.SongViewHolder {
+		binding = SwipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 		return SongViewHolder(binding)
 	}
 
@@ -28,9 +27,5 @@ class SwipeSongAdapter : BaseSongAdapter() {
 				}
 			}
 		}
-	}
-
-	fun setItemClickListener(listener: (Song) -> Unit) {
-		onItemClickListener = listener
 	}
 }

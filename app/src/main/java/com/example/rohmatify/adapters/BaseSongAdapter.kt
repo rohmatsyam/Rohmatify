@@ -31,4 +31,8 @@ abstract class BaseSongAdapter : RecyclerView.Adapter<BaseSongAdapter.SongViewHo
 	override fun getItemCount(): Int {
 		return songs.size
 	}
+
+	fun setItemClickListener(listener: (Song) -> Unit) {
+		onItemClickListener = listener
+	}
 }
