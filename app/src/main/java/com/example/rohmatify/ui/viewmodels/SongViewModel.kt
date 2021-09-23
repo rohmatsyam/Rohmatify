@@ -35,7 +35,7 @@ class SongViewModel @Inject constructor(
 			while(true){
 				val pos = playbackState.value?.curentPlaybackPosition
 				if(curPlayerPosition.value != pos){
-					_curPlayerPosition.postValue(pos)
+					_curPlayerPosition.postValue(pos!!)
 					_curSongDuration.postValue(MusicService.currentSongDuration)
 				}
 				delay(Constants.UPDATE_PLAYER_POSITION_INTERVAL)
