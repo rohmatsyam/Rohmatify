@@ -2,14 +2,19 @@ package com.example.rohmatify.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.activity.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestManager
+import com.example.rohmatify.R
 import com.example.rohmatify.adapters.SwipeSongAdapter
 import com.example.rohmatify.data.entities.Song
 import com.example.rohmatify.databinding.ActivityMainBinding
+import com.example.rohmatify.exoplayer.isPlaying
 import com.example.rohmatify.exoplayer.toSong
 import com.example.rohmatify.other.Status
 import com.example.rohmatify.ui.viewmodels.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -28,6 +33,8 @@ class MainActivity : AppCompatActivity() {
 
     private var curPlayingSong:Song? = null
 
+    private var playbackState:PlaybackStateCompat ?= null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -37,7 +44,22 @@ class MainActivity : AppCompatActivity() {
 
         binding.vpSong.adapter = swipeSongAdapter
 
+        binding.vpSong.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if(playbackState?.isPlaying == true){
+                    mainViewModel.playOrToggleSong(swipeSongAdapter.songs[position])
+                }else{
+                    curPlayingSong = swipeSongAdapter.songs[position]
+                }
+            }
+        })
 
+        binding.ivPlayPause.setOnClickListener {
+            curPlayingSong?.let {
+                mainViewModel.playOrToggleSong(it,true)
+            }
+        }
     }
 
     private fun subscribeToObservers(){
@@ -64,6 +86,36 @@ class MainActivity : AppCompatActivity() {
             curPlayingSong = it.toSong()
             glide.load(curPlayingSong?.imageUrl).into(binding.ivCurSongImage)
             switchViewPagerToCurrentSong(curPlayingSong ?: return@observe)
+        }
+        mainViewModel.playbackState.observe(this){
+            playbackState = it
+            binding.ivPlayPause.setImageResource(
+                if(playbackState?.isPlaying ==true) R.drawable.ic_pause else R.drawable.ic_play
+            )
+        }
+        mainViewModel.isConnected.observe(this){
+            it?.getContentIfNotHandled()?.let { result->
+                when(result.status){
+                    Status.ERROR -> Snackbar.make(
+                        binding.rootLayout,
+                        result.message?:"An unknown error occured",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    else ->Unit
+                }
+            }
+        }
+        mainViewModel.neworkError.observe(this){
+            it?.getContentIfNotHandled()?.let { result->
+                when(result.status){
+                    Status.ERROR -> Snackbar.make(
+                        binding.rootLayout,
+                        result.message?:"An unknown error occured",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    else ->Unit
+                }
+            }
         }
     }
 
